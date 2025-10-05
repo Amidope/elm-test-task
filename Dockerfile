@@ -21,9 +21,5 @@ RUN echo "alias a=\"php artisan\"" >> /home/devuser/.bashrc
 
 WORKDIR /laravel-app
 
-#COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-#
-#ENTRYPOINT ["entrypoint.sh"]
-
-#CMD ["bash", "-c", "make start"]
+#CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 CMD ["tail", "-f", "/dev/null"]
