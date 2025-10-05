@@ -37,7 +37,7 @@ class CreateSalesTable extends Migration
             $table->decimal('for_pay', 10, 2)->nullable();
             $table->decimal('finished_price', 10, 2)->nullable();
             $table->decimal('price_with_disc', 10, 2)->nullable();
-            $table->bigInteger('nm_id')->nullable();
+            $table->string('nm_id', 30)->nullable();
             $table->string('subject')->nullable();
             $table->string('category')->nullable();
             $table->string('brand')->nullable();

@@ -27,7 +27,7 @@ class CreateStocksTable extends Migration
             $table->string('warehouse_name')->nullable();
             $table->integer('in_way_to_client')->nullable();
             $table->integer('in_way_from_client')->nullable();
-            $table->bigInteger('nm_id')->nullable();
+            $table->string('nm_id', 30)->nullable();
             $table->string('subject')->nullable();
             $table->string('category')->nullable();
             $table->string('brand')->nullable();

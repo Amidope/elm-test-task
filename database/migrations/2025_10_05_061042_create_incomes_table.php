@@ -26,7 +26,7 @@ class CreateIncomesTable extends Migration
             $table->decimal('total_price', 10, 2)->nullable();
             $table->date('date_close')->nullable();
             $table->string('warehouse_name')->nullable();
-            $table->bigInteger('nm_id')->nullable();
+            $table->string('nm_id', 30)->nullable();
             $table->timestamps();
         });
     }
