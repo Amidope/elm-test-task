@@ -15,24 +15,24 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('g_number');
-            $table->unsignedBigInteger('nm_id');
-            $table->dateTime('date');
-            $table->date('last_change_date');
-            $table->string('supplier_article');
-            $table->string('tech_size');
-            $table->string('barcode');
-            $table->decimal('total_price', 12, 2);
-            $table->integer('discount_percent');
-            $table->string('warehouse_name');
-            $table->string('oblast');
-            $table->unsignedBigInteger('income_id');
-            $table->string('subject');
-            $table->string('category');
-            $table->string('brand');
-            $table->boolean('is_cancel')->default(false);
+            $table->string('g_number')->nullable();
+            $table->unsignedBigInteger('nm_id')->nullable();
+            $table->dateTime('date')->nullable();
+            $table->date('last_change_date')->nullable();
+            $table->string('supplier_article')->nullable();
+            $table->string('tech_size')->nullable();
+            $table->string('barcode')->nullable();
+            $table->decimal('total_price', 12, 2)->nullable();
+            $table->integer('discount_percent')->nullable();
+            $table->string('warehouse_name')->nullable();
+            $table->string('oblast')->nullable();
+            $table->unsignedBigInteger('income_id')->nullable();
+            $table->string('subject')->nullable();
+            $table->string('category')->nullable();
+            $table->string('brand')->nullable();
+            $table->boolean('is_cancel')->nullable()->default(false);
             $table->dateTime('cancel_dt')->nullable();
-            $table->string('odid');
+            $table->string('odid')->nullable();
             $table->timestamps();
         });
     }
