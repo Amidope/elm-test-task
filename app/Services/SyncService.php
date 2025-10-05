@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use Illuminate\Http\Client\RequestException;
 
 class SyncService
 {
@@ -33,12 +34,21 @@ class SyncService
         $totalSaved = 0;
 
         do {
-            $response = $this->api->fetch($this->endpoint, [
-                'dateFrom'=> $this->fromDate,
-                'dateTo' => $this->toDate,
-                'page' => $page,
-                'limit' => self::PAGE_LIMIT,
-            ]);
+            try {
+                $response = $this->api->fetch($this->endpoint, [
+                    'dateFrom'=> $this->fromDate,
+                    'dateTo' => $this->toDate,
+                    'page' => $page,
+                    'limit' => self::PAGE_LIMIT,
+                ]);
+            } catch (RequestException $e) {
+                if ($e->getCode() === 429) {
+                    sleep(5);
+                    $page--;
+                    continue;
+                }
+                throw $e;
+            }
 
             $data = $response['data'] ?? [];
             $to = $response['meta']['to'] ?? 0;
