@@ -34,7 +34,6 @@ class CreateOrdersTable extends Migration
             $table->dateTime('cancel_dt')->nullable();
             $table->string('odid');
             $table->timestamps();
-            $table->unique(['g_number', 'nm_id']);
         });
     }
 
