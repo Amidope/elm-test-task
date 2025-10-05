@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\SyncAll;
 use App\Console\Commands\SyncIncomes;
 use App\Console\Commands\SyncOrders;
 use App\Console\Commands\SyncSales;
@@ -24,51 +25,59 @@ class SyncServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(SyncOrders::class, fn($app) =>
-        new SyncOrders(
-            new SyncService(
-                $app->make(ApiClient::class),
-                endpoint: 'orders',
-                modelClass: Order::class,
-                fromDate: '2004-01-01',
-                toDate: now()->format('Y-m-d')
+            new SyncOrders(
+                new SyncService(
+                    $app->make(ApiClient::class),
+                    endpoint: 'orders',
+                    modelClass: Order::class,
+                    fromDate: '2004-01-01',
+                    toDate: now()->format('Y-m-d')
+                )
             )
-        )
         );
 
         $this->app->singleton(SyncSales::class, fn($app) =>
-        new SyncSales(
-            new SyncService(
-                $app->make(ApiClient::class),
-                endpoint: 'sales',
-                modelClass: Sale::class,
-                fromDate: '2004-01-01',
-                toDate: now()->format('Y-m-d')
+            new SyncSales(
+                new SyncService(
+                    $app->make(ApiClient::class),
+                    endpoint: 'sales',
+                    modelClass: Sale::class,
+                    fromDate: '2004-01-01',
+                    toDate: now()->format('Y-m-d')
+                )
             )
-        )
         );
 
         $this->app->singleton(SyncIncomes::class, fn($app) =>
-        new SyncIncomes(
-            new SyncService(
-                $app->make(ApiClient::class),
-                endpoint: 'incomes',
-                modelClass: Income::class,
-                fromDate: '2004-01-01',
-                toDate: now()->format('Y-m-d')
+            new SyncIncomes(
+                new SyncService(
+                    $app->make(ApiClient::class),
+                    endpoint: 'incomes',
+                    modelClass: Income::class,
+                    fromDate: '2004-01-01',
+                    toDate: now()->format('Y-m-d')
+                )
             )
-        )
         );
 
         $this->app->singleton(SyncStocks::class, fn($app) =>
-        new SyncStocks(
-            new SyncService(
-                $app->make(ApiClient::class),
-                endpoint: 'stocks',
-                modelClass: Stock::class,
-                fromDate: now()->format('Y-m-d'),
-                toDate: null
+            new SyncStocks(
+                new SyncService(
+                    $app->make(ApiClient::class),
+                    endpoint: 'stocks',
+                    modelClass: Stock::class,
+                    fromDate: now()->format('Y-m-d'),
+                    toDate: null
+                )
             )
-        )
+        );
+        $this->app->singleton(SyncAll::class, fn($app) =>
+        new SyncAll([
+            $app->make(SyncOrders::class),
+            $app->make(SyncSales::class),
+            $app->make(SyncIncomes::class),
+            $app->make(SyncStocks::class),
+        ])
         );
     }
 
