@@ -13,6 +13,11 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'reportApi' => [
+        'ip' => ENV('API_IP'),
+        'port' => ENV('API_PORT'),
+        'key' => ENV('API_KEY')
+    ],
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
