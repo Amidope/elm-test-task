@@ -32,8 +32,8 @@ class SyncService
     {
         $page = 1;
         $totalSaved = 0;
-
         do {
+
             try {
                 $response = $this->api->fetch($this->endpoint, [
                     'dateFrom'=> $this->fromDate,
@@ -44,12 +44,10 @@ class SyncService
             } catch (RequestException $e) {
                 if ($e->getCode() === 429) {
                     sleep(5);
-                    $page--;
                     continue;
                 }
                 throw $e;
             }
-
             $data = $response['data'] ?? [];
             $to = $response['meta']['to'] ?? 0;
             $total = $response['meta']['total'] ?? 0;
