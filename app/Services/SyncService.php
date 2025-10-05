@@ -25,7 +25,7 @@ class SyncService
         $this->endpoint = $endpoint;
         $this->modelClass = $modelClass;
         $this->fromDate = $fromDate ?? '2004-01-01';
-        $this->toDate = $toDate ?? now()->format('Y-m-d');
+        $this->toDate = $toDate ?? '2026-01-01';
     }
 
     public function sync(): int
@@ -53,7 +53,6 @@ class SyncService
             $data = $response['data'] ?? [];
             $to = $response['meta']['to'] ?? 0;
             $total = $response['meta']['total'] ?? 0;
-
             if (!empty($data)) {
                 $this->modelClass::insert($data);
                 $totalSaved += count($data);

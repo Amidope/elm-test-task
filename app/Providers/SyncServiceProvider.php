@@ -30,8 +30,6 @@ class SyncServiceProvider extends ServiceProvider
                     $app->make(ApiClient::class),
                     endpoint: 'orders',
                     modelClass: Order::class,
-                    fromDate: '2004-01-01',
-                    toDate: now()->format('Y-m-d')
                 )
             )
         );
@@ -42,8 +40,6 @@ class SyncServiceProvider extends ServiceProvider
                     $app->make(ApiClient::class),
                     endpoint: 'sales',
                     modelClass: Sale::class,
-                    fromDate: '2004-01-01',
-                    toDate: now()->format('Y-m-d')
                 )
             )
         );
@@ -54,8 +50,6 @@ class SyncServiceProvider extends ServiceProvider
                     $app->make(ApiClient::class),
                     endpoint: 'incomes',
                     modelClass: Income::class,
-                    fromDate: '2004-01-01',
-                    toDate: now()->format('Y-m-d')
                 )
             )
         );
