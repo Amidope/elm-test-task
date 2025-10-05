@@ -21,5 +21,7 @@ RUN echo "alias a=\"php artisan\"" >> /home/devuser/.bashrc
 
 WORKDIR /laravel-app
 
+RUN printf "memory_limit=512M\nmax_execution_time=0\n" > /usr/local/etc/php/conf.d/99-memory.ini
+
 #CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 CMD ["tail", "-f", "/dev/null"]
