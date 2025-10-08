@@ -2,12 +2,6 @@
 <details>
   <summary>Спойлер</summary>
 
-- DB_HOST=a1175940.xsph.ru  
-- DB_PORT=3306  
-- DB_DATABASE=a1175940_eml  
-- DB_USERNAME=a1175940_readonly_user  
-- DB_PASSWORD=SR4r5NaZXJYY3nDY7Dm4jEW94
-
 </details>
 
 Список таблиц:
