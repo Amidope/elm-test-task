@@ -43,6 +43,7 @@ class CreateSalesTable extends Migration
             $table->string('brand')->nullable();
             $table->boolean('is_storno')->nullable();
             $table->timestamps();
+            $table->unique(['g_number', 'nm_id', 'sale_id', 'date']);
         });
     }
 

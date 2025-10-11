@@ -14,8 +14,7 @@ class CreateIncomesTable extends Migration
     public function up()
     {
         Schema::create('incomes', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('income_id')->nullable();
+            $table->bigInteger('income_id');
             $table->string('number')->nullable();
             $table->date('date')->nullable();
             $table->date('last_change_date')->nullable();
@@ -28,6 +27,7 @@ class CreateIncomesTable extends Migration
             $table->string('warehouse_name')->nullable();
             $table->string('nm_id', 30)->nullable();
             $table->timestamps();
+            $table->primary(['income_id', 'nm_id']);
         });
     }
 
