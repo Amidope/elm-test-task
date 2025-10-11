@@ -7,7 +7,7 @@ RUN apk add --no-cache make bash bash-completion
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN set -eux; \
-    install-php-extensions pdo_mysql;
+    install-php-extensions pdo_pgsql;
 
 ARG UID=1000
 ARG GID=1000

@@ -7,7 +7,7 @@ use Illuminate\Http\Client\RequestException;
 
 class SyncService
 {
-    private const PAGE_LIMIT = 500;
+    private const PAGE_LIMIT = 100;
     readonly ApiClient $api;
     readonly string $endpoint;
     readonly string $modelClass;
@@ -30,6 +30,7 @@ class SyncService
 
     public function sync(): int
     {
+        dump($this->fromDate, $this->toDate);
         $page = 1;
         $totalSaved = 0;
         do {
@@ -52,7 +53,18 @@ class SyncService
             $to = $response['meta']['to'] ?? 0;
             $total = $response['meta']['total'] ?? 0;
             if (!empty($data)) {
-                $this->modelClass::insert($data);
+                $b = collect($data)->get(59);
+                $a = collect(collect($data)->get(58))->filter(function ($v, $k) use ($b) {
+                    return !$v === $b[$k];
+                });
+                dd($a);
+                dd(collect($data)->get(58));
+//                $grouped = collect($data)->groupBy(['nm_id', 'warehouse_name', 'sc_code']);
+
+//                $duplicateGroups = $grouped->filter(fn($group) => $group->count() > 1);
+//                dd($duplicateGroups);
+
+                $this->modelClass::upsert($data, ['nm_id', 'warehouse_name', 'sc_code']);
                 $totalSaved += count($data);
             }
 
