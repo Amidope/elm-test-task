@@ -12,4 +12,18 @@ services:
       - host.docker.internal:host-gateway
     volumes:
       - ./:/laravel-app
-
+  db:
+    image: mysql:8.0
+    command: --port=${DB_PORT}
+    ports:
+      - "${EXTERNAL_DB_PORT}:${DB_PORT}"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+volumes:
+  db_data:
