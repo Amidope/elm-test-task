@@ -14,7 +14,7 @@ class AddTokenType extends Command
      * @var string
      */
     protected $signature = 'token-type:add
-                          {name : Название типа токена}
+                          {name? : Название типа токена}
                           {--list : Показать список существующих типов}';
 
     /**
@@ -22,7 +22,7 @@ class AddTokenType extends Command
      *
      * @var string
      */
-    protected $description = 'Добавить новый тип токена в систему';
+    protected $description = "Добавить новый тип токена в систему";
 
     /**
      * Create a new command instance.
@@ -46,7 +46,14 @@ class AddTokenType extends Command
             return 0;
         }
 
-        $name = strtolower(trim($this->argument('name')));
+        $name = $this->argument('name');
+
+        if (!$name) {
+            $this->error('Укажите название типа токена');
+            return 1;
+        }
+
+        $name = strtolower(trim($name));
 
         if (TokenType::where('name', $name)->exists()) {
             $this->error("Ошибка: Тип токена '{$name}' уже существует!");
