@@ -8,9 +8,8 @@ use Illuminate\Console\Command;
 class AddTokenType extends Command
 {
     /**
+     * The name and signature of the console command.
      *
-     * {name} - обязательный аргумент (имя типа токена)
-     * {--list} - опциональный флаг для вывода списка существующих типов
      * @var string
      */
     protected $signature = 'token-type:add
