@@ -3,17 +3,15 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Account;
 
 class CreateIncomesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('incomes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Account::class)->constrained()->cascadeOnDelete();
             $table->bigInteger('income_id');
             $table->string('number')->nullable();
             $table->date('date')->nullable();
@@ -27,15 +25,11 @@ class CreateIncomesTable extends Migration
             $table->string('warehouse_name')->nullable();
             $table->string('nm_id', 30)->nullable();
             $table->timestamps();
-            $table->primary(['income_id', 'nm_id']);
+            $table->unique(['account_id', 'income_id', 'nm_id']);
+            $table->index('date');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('incomes');

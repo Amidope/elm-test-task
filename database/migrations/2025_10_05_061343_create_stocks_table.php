@@ -3,18 +3,16 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Account;
 
 class CreateStocksTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Account::class)->constrained()->cascadeOnDelete();
+
             $table->date('date')->nullable();
             $table->date('last_change_date')->nullable();
             $table->string('supplier_article')->nullable();
@@ -35,15 +33,12 @@ class CreateStocksTable extends Migration
             $table->decimal('price', 10, 2)->nullable();
             $table->decimal('discount', 10, 2)->nullable();
             $table->timestamps();
-            $table->unique(['nm_id', 'warehouse_name', 'sc_code']);
+
+            $table->unique(['account_id', 'nm_id', 'warehouse_name', 'sc_code', 'date']);
+            $table->index('date');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('stocks');

@@ -3,18 +3,15 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Account;
 
 class CreateSalesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Account::class)->constrained()->cascadeOnDelete();
             $table->string('g_number')->nullable();
             $table->date('date')->nullable();
             $table->date('last_change_date')->nullable();
@@ -43,15 +40,12 @@ class CreateSalesTable extends Migration
             $table->string('brand')->nullable();
             $table->boolean('is_storno')->nullable();
             $table->timestamps();
-            $table->unique(['g_number', 'nm_id', 'sale_id', 'date']);
+
+            $table->unique(['account_id', 'g_number', 'nm_id', 'sale_id', 'date']);
+            $table->index('date');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('sales');

@@ -17,6 +17,8 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
