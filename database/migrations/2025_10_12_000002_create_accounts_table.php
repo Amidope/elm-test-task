@@ -17,9 +17,12 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
+            $table->string('account_id'); // ID аккаунта в маркетплейсе
             $table->string('name');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            $table->unique(['company_id', 'account_id']); // Уникальность в рамках компании
         });
     }
 
