@@ -15,6 +15,8 @@ class CreateApiServicesTable extends Migration
     {
         Schema::create('api_services', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
+            $table->string('base_url')->nullable();
             $table->timestamps();
         });
     }
