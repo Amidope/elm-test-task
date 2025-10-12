@@ -15,7 +15,6 @@ class AddAccount extends Command
      */
     protected $signature = 'account:add
                           {company_id : ID компании}
-                          {account_id : ID аккаунта в маркетплейсе}
                           {name : Название аккаунта}
                           {--list : Показать список аккаунтов}';
 
@@ -49,7 +48,6 @@ class AddAccount extends Command
         }
 
         $companyId = $this->argument('company_id');
-        $accountId = trim($this->argument('account_id'));
         $name = trim($this->argument('name'));
 
         $company = Company::find($companyId);
@@ -61,21 +59,19 @@ class AddAccount extends Command
             return 1;
         }
 
-        if ($company->accounts()->where('account_id', $accountId)->exists()) {
-            $this->error("Аккаунт с ID '{$accountId}' уже существует у компании '{$company->name}'!");
+        if ($company->accounts()->where('name', $name)->exists()) {
+            $this->error("Аккаунт '{$name}' уже существует у компании '{$company->name}'!");
             return 1;
         }
 
         try {
             $account = Account::create([
                 'company_id' => $company->id,
-                'account_id' => $accountId,
                 'name' => $name,
                 'is_active' => true,
             ]);
 
-            $this->info("✓ Аккаунт '{$name}' (ID: {$accountId}) добавлен для компании '{$company->name}'");
-            $this->line("  Внутренний ID: {$account->id}");
+            $this->info("✓ Аккаунт '{$name}' добавлен для компании '{$company->name}' (ID: {$account->id})");
 
             return 0;
 
@@ -110,7 +106,7 @@ class AddAccount extends Command
             } else {
                 foreach ($company->accounts as $account) {
                     $status = $account->is_active ? '<fg=green>активен</>' : '<fg=red>неактивен</>';
-                    $this->line("    [ID маркетплейса: {$account->account_id}] {$account->name} ({$status})");
+                    $this->line("    [{$account->id}] {$account->name} ({$status})");
                 }
             }
 
