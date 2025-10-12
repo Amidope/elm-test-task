@@ -10,7 +10,6 @@ class Account extends Model
 {
     protected $fillable = [
         'company_id',
-        'account_id',
         'name',
         'is_active',
     ];
