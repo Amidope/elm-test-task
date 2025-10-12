@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Income extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
+        'account_id',
         'income_id',
         'number',
         'date',
@@ -27,12 +25,12 @@ class Income extends Model
 
     protected $casts = [
         'income_id' => 'integer',
-        'date' => 'datetime:Y-m-d',
-        'last_change_date' => 'datetime:Y-m-d',
-        'barcode' => 'bigInteger',
+        'date' => 'date',
+        'last_change_date' => 'date',
+        'barcode' => 'integer',
         'quantity' => 'integer',
         'total_price' => 'decimal:2',
-        'date_close' => 'datetime:Y-m-d',
+        'date_close' => 'date',
         'nm_id' => 'integer',
     ];
 

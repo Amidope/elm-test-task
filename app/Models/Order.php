@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'account_id',
         'g_number',
@@ -29,7 +26,17 @@ class Order extends Model
         'brand',
         'is_cancel',
         'cancel_dt',
-        'odid'
+        'odid',
+    ];
+
+    protected $casts = [
+        'date' => 'datetime',
+        'last_change_date' => 'date',
+        'total_price' => 'decimal:2',
+        'discount_percent' => 'integer',
+        'income_id' => 'integer',
+        'is_cancel' => 'boolean',
+        'cancel_dt' => 'datetime',
     ];
 
     public function account(): BelongsTo

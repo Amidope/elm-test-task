@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Stock extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'account_id',
         'date',
@@ -34,9 +31,9 @@ class Stock extends Model
     ];
 
     protected $casts = [
-        'date' => 'datetime:Y-m-d',
-        'last_change_date' => 'datetime:Y-m-d',
-        'barcode' => 'bigInteger',
+        'date' => 'date',
+        'last_change_date' => 'date',
+        'barcode' => 'integer',
         'quantity' => 'integer',
         'is_supply' => 'boolean',
         'is_realization' => 'boolean',
