@@ -18,7 +18,7 @@ class SyncService
 
     public function __construct(
         ApiClient               $api,
-        ApiDataHandlerInterface $service,
+//        ApiDataHandlerInterface $service,
         string                  $endpoint,
         string                  $modelClass,
         ?string                 $fromDate = null,
@@ -29,7 +29,7 @@ class SyncService
         $this->modelClass = $modelClass;
         $this->fromDate = $fromDate ?? '2004-01-01';
         $this->toDate = $toDate ?? '2026-01-01';
-        $this->service = $service;
+//        $this->service = $service;
     }
 
     public function sync(): int

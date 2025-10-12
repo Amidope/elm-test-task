@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\Sale;
 use App\Models\Stock;
 use App\Services\ApiClient;
+use App\Services\IncomeService;
 use App\Services\SyncService;
 use Illuminate\Support\ServiceProvider;
 
@@ -61,7 +62,7 @@ class SyncServiceProvider extends ServiceProvider
                     endpoint: 'stocks',
                     modelClass: Stock::class,
                     fromDate: now()->format('Y-m-d'),
-                    toDate: null
+                    toDate: null,
                 )
             )
         );
