@@ -50,7 +50,7 @@ class WbReportsService
         foreach ($generator as $pageData) {
             $dataWithId = addAccountId($pageData, $this->account);
             $saved += count($dataWithId);
-            dump(Sale::upsert($dataWithId, ['account_id', 'g_number', 'nm_id', 'sale_id', 'date']));
+            Sale::upsert($dataWithId, ['account_id', 'g_number', 'nm_id', 'sale_id', 'date']);
         }
         unset($dataWithId, $pageData);
         gc_collect_cycles();
@@ -81,7 +81,7 @@ class WbReportsService
                 foreach ($generator as $pageData) {
                     $dataWithId = addAccountId($pageData, $this->account);
                     $saved += count($dataWithId);
-                    dump(Order::insert($dataWithId));
+                    Order::insert($dataWithId);
                 }
             });
             return $saved;
@@ -106,12 +106,6 @@ class WbReportsService
         )->get()->toArray();
 
         $filtered = rejectSaved(normalizeOrdersForCompare($newOrders), $ordersFromLastDate);
-
-        dump(count($newOrders));
-        dump(count($ordersFromLastDate));
-        dump(count($filtered));
-        dump('записываю');
-
 
         collect($filtered)
             ->chunk(1000)
