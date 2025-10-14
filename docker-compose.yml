@@ -14,21 +14,6 @@ services:
             - ./:/laravel-app
         depends_on:
             - db
-    queue:
-        build:
-            dockerfile: Dockerfile
-            args:
-                UID: ${UID:-1000}
-                GID: ${GID:-1000}
-        user: "${UID:-1000}:${GID:-1000}"
-        extra_hosts:
-            - host.docker.internal:host-gateway
-        volumes:
-            - ./:/laravel-app
-        depends_on:
-            - db
-            - app
-        command: php artisan queue:work database --sleep=3 --tries=2 --timeout=1800
         restart: unless-stopped
 
     db:
