@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SyncSalesJob;
 use App\Models\Account;
 use App\Models\Income;
 use App\Models\Sale;
@@ -17,14 +18,14 @@ class SyncSales extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:sales';
+    protected $signature = 'sync:sales {account-id? : ID аккаунта}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Sync sales with API';
+    protected $description = 'Асинхронная синхронизация продаж';
 
     /**
      * Create a new command instance.
@@ -43,9 +44,28 @@ class SyncSales extends Command
      */
     public function handle()
     {
+        $accountId = $this->argument('account-id');
+        // если передали id то синхронизация будет только для этого аккаунта
+        $accounts = $accountId
+            ? Account::where('id', $accountId)->where('is_active', true)->get()
+            : Account::where('is_active', true)->get();
 
-        $account = Account::find(1);
-        (new WbReportsService($account))->syncSales();
-        return self::SUCCESS;
+        if ($accounts->isEmpty()) {
+            $this->error('Активные аккаунты не найдены');
+            return 1;
+        }
+
+        $this->info("Добавление задач в очередь для {$accounts->count()} аккаунтов...");
+
+        foreach ($accounts as $account) {
+            SyncSalesJob::dispatch($account->id);
+            $this->info("✓ Job добавлен для аккаунта ID {$account->id} ({$account->name})");
+        }
+
+        $this->info('');
+        $this->info('Все задачи добавлены в очередь!');
+        $this->info('Запустите worker: docker-compose exec app php artisan queue:work');
+
+        return 0;
     }
 }
