@@ -4,12 +4,10 @@ namespace App\Services\WbReports;
 
 use App\Models\Account;
 use App\Models\ApiService;
-use App\Models\ApiToken;
 use App\Models\Sale;
 use App\Models\Order;
 use App\Models\Stock;
 use App\Models\Income;
-use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +21,11 @@ class WbReportsService
     {
         $this->account = $account;
         $serviceName = 'wb-reports-api';
-        $token = Account::find(1)->getTokenForService($serviceName);
+        $token = $account->getTokenForService($serviceName);
+        if (!$token) {
+            throw new \Exception("Токен для сервиса {$serviceName} не найден для аккаунта ID {$account->id}");
+        }
+
         $baseUrl = ApiService::where(['name' => $serviceName])->first()->base_url;
         $this->client = new WbReportsClient($baseUrl, $token);
     }
@@ -50,7 +52,8 @@ class WbReportsService
             $saved += count($dataWithId);
             dump(Sale::upsert($dataWithId, ['account_id', 'g_number', 'nm_id', 'sale_id', 'date']));
         }
-
+        unset($dataWithId, $pageData);
+        gc_collect_cycles();
         return $saved;
     }
 
