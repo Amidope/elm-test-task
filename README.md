@@ -8,6 +8,9 @@ Scheduler запускает команду `sync:all` для синхрониз
 
 Scheduler и воркер стартует вместе с контейнером через `start.sh`.
 
+Название вашего апи сервиса жестко прописано как `wb-reports-api`, используйте именно это название
+в командах при создании вашего апи сервиса. Оно уже вставлено ниже.
+
 ### Команды
 
 Просто скопируйте команды чтобы быстро начать
@@ -18,6 +21,18 @@ php artisan token-type:add api-key
 php artisan api-service:add wb-reports-api http://109.73.206.144:6969 api-key
 php artisan api-token:add 1 wb-reports-api api-key E6kUTYrYwZq2tN4QEtyzsbEBk3ie
 ```
+
+<details>
+  
+```bash
+
+company:add <name>
+account:add <company_id> <name>
+token-type:add <name>
+api-service:add <name> <base_url> [<token_types>...]
+api-token:add <account_id> <api_service> <token_type> [<token>...]
+```
+</details>
 
 Команды можно запустить и вручную:
 
