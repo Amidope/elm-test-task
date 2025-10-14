@@ -1,27 +1,27 @@
-FROM php:8.3-fpm-alpine3.20
+FROM php:8.2-cli
+
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    procps \
+    && docker-php-ext-install pdo pdo_mysql zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN apk add --no-cache make bash bash-completion
-
-ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN set -eux; \
-    install-php-extensions pdo_mysql;
-
 ARG UID=1000
 ARG GID=1000
-
-RUN addgroup -g ${GID} devgroup && \
-    adduser -D -u ${UID} -G devgroup devuser
-
-ENV TERM=xterm-256color
-RUN echo "PS1='\e[92m\u\e[0m@\e[94m\h\e[0m:\e[35m\w\e[0m# '" >> /home/devuser/.bashrc
-RUN echo "alias a=\"php artisan\"" >> /home/devuser/.bashrc
-
-WORKDIR /laravel-app
+RUN groupadd -g ${GID} laravel && \
+    useradd -u ${UID} -g laravel -m -s /bin/bash laravel
 
 RUN printf "memory_limit=512M\nmax_execution_time=0\n" > /usr/local/etc/php/conf.d/99-memory.ini
 
-#CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
-CMD ["tail", "-f", "/dev/null"]
+WORKDIR /laravel-app
+
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
