@@ -41,9 +41,7 @@ class SyncStocks extends Command
     public function handle(): int
     {
         $account = Account::find(1);
-        $apiToken = $account->apiTokens()->first();
-        $saved = (new WbReportsService($apiToken))->syncStocks($account);
-        dump($saved);
+        (new WbReportsService($account))->syncStocks();
         return self::SUCCESS;
     }
 }

@@ -42,8 +42,7 @@ class SyncIncomes extends Command
     public function handle()
     {
         $account = Account::find(1);
-        $apiToken = $account->apiTokens()->first();
-        (new WbReportsService($apiToken))->syncIncomes($account);
+        (new WbReportsService($account))->syncIncomes();
         return self::SUCCESS;
     }
 }

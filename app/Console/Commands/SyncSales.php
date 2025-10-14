@@ -43,9 +43,9 @@ class SyncSales extends Command
      */
     public function handle()
     {
+
         $account = Account::find(1);
-        $apiToken = $account->apiTokens()->first();
-        (new WbReportsService($apiToken))->syncSales($account);
+        (new WbReportsService($account))->syncSales();
         return self::SUCCESS;
     }
 }
