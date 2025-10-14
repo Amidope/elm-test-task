@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Account;
 use App\Services\SyncService;
+use App\Services\WbReports\WbReportsService;
 use Illuminate\Console\Command;
 
 class SyncOrders extends Command
@@ -26,7 +28,7 @@ class SyncOrders extends Command
      *
      * @return void
      */
-    public function __construct(private SyncService $syncService)
+    public function __construct()
     {
         parent::__construct();
     }
@@ -38,7 +40,8 @@ class SyncOrders extends Command
      */
     public function handle(): int
     {
-        $this->syncService->sync();
+        $account = Account::find(1);
+        (new WbReportsService($account))->syncOrders();
         return self::SUCCESS;
     }
 }

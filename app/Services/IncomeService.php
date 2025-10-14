@@ -2,16 +2,17 @@
 
 namespace App\Services;
 
+use App\Contracts\ApiDataHandlerInterface;
 use App\Models\Income;
 
 class IncomeService implements ApiDataHandlerInterface
 {
 
-    public function __construct(private Income $income)
+    public function __construct()
     {
     }
     public function handleData(array $data): void
     {
-        $this->income::upsert($data, ['income_id', 'nm_id']);
+        Income::upsert($data, ['account_id', 'income_id', 'nm_id']);
     }
 }

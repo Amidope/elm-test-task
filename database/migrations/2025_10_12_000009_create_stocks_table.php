@@ -34,7 +34,6 @@ class CreateStocksTable extends Migration
             $table->decimal('discount', 10, 2)->nullable();
             $table->timestamps();
 
-            $table->unique(['account_id', 'nm_id', 'warehouse_name', 'sc_code', 'date']);
             $table->index('date');
         });
     }

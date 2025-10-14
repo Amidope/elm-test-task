@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Account;
 use App\Services\SyncService;
+use App\Services\WbReports\WbReportsService;
 use Illuminate\Console\Command;
 
 class SyncStocks extends Command
@@ -26,7 +28,7 @@ class SyncStocks extends Command
      *
      * @return void
      */
-    public function __construct(private SyncService $syncService)
+    public function __construct()
     {
         parent::__construct();
     }
@@ -38,7 +40,10 @@ class SyncStocks extends Command
      */
     public function handle(): int
     {
-        $this->syncService->sync();
+        $account = Account::find(1);
+        $apiToken = $account->apiTokens()->first();
+        $saved = (new WbReportsService($apiToken))->syncStocks($account);
+        dump($saved);
         return self::SUCCESS;
     }
 }

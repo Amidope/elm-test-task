@@ -18,6 +18,14 @@ class Account extends Model
         'is_active' => 'boolean',
     ];
 
+    public function getTokenForService(string $serviceName): ?string
+    {
+        return $this->apiTokens()
+            ->whereHas('apiService', function($q) use ($serviceName) {
+                $q->where('name', $serviceName);
+            })
+            ->first()?->token;
+    }
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

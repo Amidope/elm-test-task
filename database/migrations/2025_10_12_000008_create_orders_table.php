@@ -17,14 +17,13 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Account::class)->constrained()->cascadeOnDelete();
-
             $table->string('g_number')->nullable();
-            $table->string('nm_id', 30)->nullable();
+            $table->bigInteger('nm_id')->nullable();
             $table->dateTime('date')->nullable();
             $table->date('last_change_date')->nullable();
             $table->string('supplier_article')->nullable();
             $table->string('tech_size')->nullable();
-            $table->string('barcode')->nullable();
+            $table->bigInteger('barcode')->nullable();
             $table->decimal('total_price', 12, 2)->nullable();
             $table->integer('discount_percent')->nullable();
             $table->string('warehouse_name')->nullable();
@@ -37,8 +36,6 @@ class CreateOrdersTable extends Migration
             $table->dateTime('cancel_dt')->nullable();
             $table->string('odid')->nullable();
             $table->timestamps();
-
-            $table->unique(['account_id', 'g_number', 'nm_id', 'date']);
             $table->index('date');
         });
     }

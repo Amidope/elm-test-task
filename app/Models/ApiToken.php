@@ -45,37 +45,40 @@ class ApiToken extends Model
         return $this->belongsTo(TokenType::class);
     }
 
-    // Шифрование токена
+    // Шифрование токена при записи
     public function setTokenAttribute($value): void
     {
         $this->attributes['token'] = Crypt::encryptString($value);
     }
 
-    public function getDecryptedTokenAttribute(): string
+    // Расшифровка токена при чтении
+    public function getTokenAttribute($value): ?string
     {
-        return Crypt::decryptString($this->attributes['token']);
+        return $value ? Crypt::decryptString($value) : null;
     }
 
-    // Шифрование логина
+    // Шифрование логина при записи
     public function setLoginAttribute($value): void
     {
         $this->attributes['login'] = $value ? Crypt::encryptString($value) : null;
     }
 
-    public function getDecryptedLoginAttribute(): ?string
+    // Расшифровка логина при чтении
+    public function getLoginAttribute($value): ?string
     {
-        return $this->attributes['login'] ? Crypt::decryptString($this->attributes['login']) : null;
+        return $value ? Crypt::decryptString($value) : null;
     }
 
-    // Шифрование пароля
+    // Шифрование пароля при записи
     public function setPasswordAttribute($value): void
     {
         $this->attributes['password'] = $value ? Crypt::encryptString($value) : null;
     }
 
-    public function getDecryptedPasswordAttribute(): ?string
+    // Расшифровка пароля при чтении
+    public function getPasswordAttribute($value): ?string
     {
-        return $this->attributes['password'] ? Crypt::decryptString($this->attributes['password']) : null;
+        return $value ? Crypt::decryptString($value) : null;
     }
 
     public function isExpired(): bool
