@@ -12,11 +12,6 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-ARG UID=1000
-ARG GID=1000
-RUN groupadd -g ${GID} laravel && \
-    useradd -u ${UID} -g laravel -m -s /bin/bash laravel
-
 RUN printf "memory_limit=512M\nmax_execution_time=0\n" > /usr/local/etc/php/conf.d/99-memory.ini
 
 WORKDIR /laravel-app
