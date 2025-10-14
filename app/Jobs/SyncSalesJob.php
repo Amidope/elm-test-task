@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Account;
-use App\Services\WbReportsService;
+use App\Services\WbReports\WbReportsService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -45,7 +45,7 @@ class SyncSalesJob implements ShouldQueue
 
         } catch (\Exception $e) {
             Log::error("Ошибка синхронизации продаж для аккаунта ID {$this->accountId}: " . $e->getMessage());
-            throw $e; // Перебросит для retry
+            throw $e;
         }
     }
 
