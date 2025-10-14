@@ -148,7 +148,7 @@ class WbReportsService
      * @return int
      * @throws Exception
      */
-    public function syncIncomes(Carbon $dateFrom = null, Carbon $dateTo = null): int
+    public function syncIncomes(): int
     {
         $saved = 0;
 
