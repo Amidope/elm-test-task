@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('sync:all')
-            ->dailyAt('12:30')
+            ->dailyAt('12:00')
             ->withoutOverlapping()
             ->appendOutputTo(storage_path('logs/sync-12.log'));
 
