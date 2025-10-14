@@ -1,29 +1,49 @@
 services:
-  app:
-    build:
-      dockerfile: Dockerfile
-      args:
-        UID: ${UID:-1000}
-        GID: ${GID:-1000}
-    ports:
-      - "8000:8000"
-    user: "${UID:-1000}:${GID:-1000}"
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    volumes:
-      - ./:/laravel-app
-  db:
-    image: mysql:8.0
-    command: --port=${DB_PORT}
-    ports:
-      - "${EXTERNAL_DB_PORT}:${DB_PORT}"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - db_data:/var/lib/mysql
-    restart: unless-stopped
+    app:
+        build:
+            dockerfile: Dockerfile
+            args:
+                UID: ${UID:-1000}
+                GID: ${GID:-1000}
+        ports:
+            - "8000:8000"
+        user: "${UID:-1000}:${GID:-1000}"
+        extra_hosts:
+            - host.docker.internal:host-gateway
+        volumes:
+            - ./:/laravel-app
+        depends_on:
+            - db
+    queue:
+        build:
+            dockerfile: Dockerfile
+            args:
+                UID: ${UID:-1000}
+                GID: ${GID:-1000}
+        user: "${UID:-1000}:${GID:-1000}"
+        extra_hosts:
+            - host.docker.internal:host-gateway
+        volumes:
+            - ./:/laravel-app
+        depends_on:
+            - db
+            - app
+        command: php artisan queue:work database --sleep=3 --tries=2 --timeout=1800
+        restart: unless-stopped
+
+    db:
+        image: mysql:8.0
+        command: --port=${DB_PORT}
+        ports:
+            - "${EXTERNAL_DB_PORT}:${DB_PORT}"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - db_data:/var/lib/mysql
+        restart: unless-stopped
+
 volumes:
-  db_data:
+    db_data:
