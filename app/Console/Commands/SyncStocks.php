@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SyncStocksJob;
 use App\Models\Account;
 use App\Services\SyncService;
 use App\Services\WbReports\WbReportsService;
@@ -14,14 +15,14 @@ class SyncStocks extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:stocks';
+    protected $signature = 'sync:stocks {account-id? : ID аккаунта}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Sync stocks with API';
+    protected $description = 'Асинхронная синхронизация остатков';
 
     /**
      * Create a new command instance.
@@ -38,10 +39,27 @@ class SyncStocks extends Command
      *
      * @return int
      */
-    public function handle(): int
+    public function handle()
     {
-        $account = Account::find(1);
-        (new WbReportsService($account))->syncStocks();
-        return self::SUCCESS;
+        $accountId = $this->argument('account-id');
+
+        $accounts = $accountId
+            ? Account::where('id', $accountId)->where('is_active', true)->get()
+            : Account::where('is_active', true)->get();
+
+        if ($accounts->isEmpty()) {
+            $this->error('Активные аккаунты не найдены');
+            return 1;
+        }
+
+        $this->info("Добавление задач в очередь для {$accounts->count()} аккаунтов...");
+
+        foreach ($accounts as $account) {
+            SyncStocksJob::dispatch($account->id);
+            $this->info("✓ Job добавлен для аккаунта ID {$account->id}");
+        }
+
+        $this->info('Все задачи добавлены в очередь!');
+        return 0;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SyncIncomesJob;
 use App\Models\Account;
 use App\Models\Income;
 use App\Services\SyncService;
@@ -15,14 +16,14 @@ class SyncIncomes extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:incomes';
+    protected $signature = 'sync:incomes {account-id? : ID аккаунта}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Sync incomes with API';
+    protected $description = 'Асинхронная синхронизация доходов';
 
     /**
      * Create a new command instance.
@@ -41,8 +42,25 @@ class SyncIncomes extends Command
      */
     public function handle()
     {
-        $account = Account::find(1);
-        (new WbReportsService($account))->syncIncomes();
-        return self::SUCCESS;
+        $accountId = $this->argument('account-id');
+
+        $accounts = $accountId
+            ? Account::where('id', $accountId)->where('is_active', true)->get()
+            : Account::where('is_active', true)->get();
+
+        if ($accounts->isEmpty()) {
+            $this->error('Активные аккаунты не найдены');
+            return 1;
+        }
+
+        $this->info("Добавление задач в очередь для {$accounts->count()} аккаунтов...");
+
+        foreach ($accounts as $account) {
+            SyncIncomesJob::dispatch($account->id);
+            $this->info("✓ Job добавлен для аккаунта ID {$account->id}");
+        }
+
+        $this->info('Все задачи добавлены в очередь!');
+        return 0;
     }
 }

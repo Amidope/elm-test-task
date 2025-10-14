@@ -99,11 +99,10 @@ class WbReportsService
             $newOrders = array_merge($newOrders, $dataWithId);
         }
 
-        $ordersFromLastDate = Order::where(
-            'date',
-            '>=',
-            Carbon::parse($lastOrder->date)->setTime(00, 00)
-        )->get()->toArray();
+        $ordersFromLastDate = Order::where('account_id', $this->account->id)
+            ->where('date', '>=', Carbon::parse($lastOrder->date)->setTime(0, 0))
+            ->get()
+            ->toArray();
 
         $filtered = rejectSaved(normalizeOrdersForCompare($newOrders), $ordersFromLastDate);
 
@@ -134,7 +133,7 @@ class WbReportsService
             foreach ($generator as $pageData) {
                 $dataWithId = addAccountId($pageData, $this->account);
                 $saved += count($dataWithId);
-                dump(Stock::insert($dataWithId));
+                Stock::insert($dataWithId);
             }
         });
 
@@ -161,7 +160,7 @@ class WbReportsService
         foreach ($generator as $pageData) {
             $dataWithId = addAccountId($pageData, $this->account);
             $saved += count($dataWithId);
-            dump(Income::upsert($dataWithId, ['account_id', 'income_id', 'nm_id']));
+            Income::upsert($dataWithId, ['account_id', 'income_id', 'nm_id']);
         }
 
         return $saved;
