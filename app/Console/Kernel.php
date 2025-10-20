@@ -15,15 +15,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $logFile = storage_path('logs/sync.log');
         $schedule->command('sync:all')
             ->dailyAt('12:00')
             ->withoutOverlapping()
-            ->appendOutputTo(storage_path('logs/sync-12.log'));
+            ->appendOutputTo(storage_path($logFile));
 
         $schedule->command('sync:all')
             ->dailyAt('18:00')
             ->withoutOverlapping()
-            ->appendOutputTo(storage_path('logs/sync-18.log'));
+            ->appendOutputTo(storage_path($logFile));
     }
 
     /**
